@@ -5,14 +5,12 @@ lst = []
 
 for _ in range(k):
     ord = int(sys.stdin.readline())
-    if ord != 0:
-        lst.append(int(ord))
-    else:
+    if not ord:
         if len(lst) == 0:
             continue
         else:
             lst.pop()
-    
-
-
+    else:
+        lst.append(int(ord))
+        
 print(sum(lst))
