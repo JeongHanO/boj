@@ -20,7 +20,7 @@ def bfs(v):
     q = deque()
     q.append(v)
     while q:
-        a = q.pop()
+        a = q.popleft()
         for i in adj[a]:
             if not visited[i]:
                 q.append(i)
