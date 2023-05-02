@@ -7,13 +7,12 @@ ropes = []
 for i in range(n):
     ropes.append(int(input()))
 
-ropes.sort()
+ropes.sort(reverse=True)
 
 sum = []
-sum.append(ropes[-1])
 
-for i in range(1,n):
-    sum.append(ropes[n-i-1]*(i+1))
+for i in range(n):
+    sum.append(ropes[i]*(i+1))
     
 print(max(sum))
 
