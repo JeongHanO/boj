@@ -1,9 +1,6 @@
 import sys
 x = int(input())
 
-cnt = 0
-num = 1
-
 dp = [0]*(x+1)
 
 for i in range(2, x+1):
