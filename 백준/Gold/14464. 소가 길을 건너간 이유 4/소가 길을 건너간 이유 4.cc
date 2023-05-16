@@ -1,63 +1,59 @@
 #include <iostream>
 #include <queue>
-#include <vector>
+#include <utility>
 #include <algorithm>
- 
 using namespace std;
- 
+
 struct Cow{
-    int s,e;
+    int st, end;
 };
- 
-struct cmp{
+
+struct  cmp{
     bool operator()(Cow a, Cow b){
-        if(a.e != b.e) return a.e > b.e;
-        return a.s > b.s;
+        if(a.end != b.end) return a.end > b.end;
+        return a.st > b.st;
     }
 };
- 
-int c, n;
-int t;
-int ans=0;
- 
-vector<pair<int, int> > chicken; // 시간, 수행했는지 여부  
-priority_queue<Cow, vector<Cow>, cmp> cow; // 끝나는 시간 기준으로 오름차순 저장. 최소 힙. 
- 
- 
+
 bool c_cmp(pair<int, int> a, pair<int, int> b){
     return a.first < b.first;
 }
- 
-int main(void){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    
+
+int c, n;
+vector<pair<int, bool> > chi;
+priority_queue<Cow, vector<Cow>, cmp> cow;
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> c >> n;
- 
-    for(int i=0; i<c; i++){
-        cin >> t;
-        chicken.push_back({t, 0});
+
+    int a, b;
+    for(int i = 0; i < c; i++){
+        cin >> a;
+        chi.push_back({a, false});
     }
     
-    int s, e;
-    for(int i=0; i<n; i++){
-        cin >> s >> e;
-        cow.push({s, e});
+    sort(chi.begin(), chi.end(), c_cmp);
+
+    for(int i = 0; i < n; i++){
+        cin >> a >> b;
+        cow.push({a,b});
     }
-    
-    sort(chicken.begin(), chicken.end(), c_cmp);
-    
-    // 소를 하나씩 꺼내서 닭의 시간과 맞는지 확인하기  
+
+    int ans = 0;
     while(!cow.empty()){
-        for(int i=0; i<c; i++){
-            if(chicken[i].first >= cow.top().s && chicken[i].first <= cow.top().e && chicken[i].second == 0){
-                ans ++;
-                chicken[i].second = 1;
+        for(int i = 0; i < c; i++){
+            if(chi[i].first >= cow.top().st && chi[i].first <= cow.top().end && chi[i].second == 0){
+                ans++;
+                chi[i].second = true;
                 break;
             }
-        }
+        }        
         cow.pop();
     }
- 
-    cout << ans << endl;
+
+    cout << ans;
+    return 0;
 }
