@@ -15,24 +15,21 @@ int main(){
     int left = 0;
     int right = 0;
     int cnt = 0;
+    int sum = v[0];
     while(right < n){
-        int sum = 0;
-        for(int j = left; j <= right; j++){
-            sum += v[j];
+        if(sum < m){
+            sum += v[++right];
         }
-        if(sum == m){
-            left++;
-            right++;
+        else if(sum == m){
             cnt++;
-        }
-        else if(sum < m){
-            right++;
+            sum += v[++right];
         }
         else{
-            left++;
-        }
-        if(left > right){
-            right = left;
+            sum -= v[left++];
+            if(left > right){
+                right = left;
+                sum = v[left];
+            }
         }
     }
     cout << cnt;
