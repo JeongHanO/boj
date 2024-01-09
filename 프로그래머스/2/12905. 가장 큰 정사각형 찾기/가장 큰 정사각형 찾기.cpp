@@ -17,6 +17,10 @@ int solution(vector<vector<int>> board)
             }
         }
     }
+    
+    if(answer == 0){
+        if(board[0][0] || board[0][1] ||board[1][0] ||board[1][1]) answer = 1;
+    }
 
     return answer*answer;
 }
