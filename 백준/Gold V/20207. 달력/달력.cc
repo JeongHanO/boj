@@ -1,70 +1,39 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
+#define ONE_YEAR 365
 using namespace std;
+using pii = pair<int,int>;
+int yearCnt[ONE_YEAR + 1], n, height, width, ans;
+vector <pii> plan;
 
-int n, ans = 0;
-vector<pair<int, int>> v;
-
-bool cmp(pair<int, int> a, pair<int, int> b){
-    if(a.first < b.first) return true;
-    else if(a.first > b.first) return false;
-    else{
-        if(a.second > b.second) return true;
-        else return false;
+bool cmp(pii &a, pii &b){
+    if(a.first == b.first){
+        return a.second - a.first > b.second - b.first;
     }
+    return a.first < b.first;
 }
 
 int main(){
     cin >> n;
-    for(int i = 0; i < n; i++){
-        int a, b; cin >> a >> b;
-        v.push_back({a,b});
+    for(int i = 0,s,e; i < n; i++){
+        cin >> s >> e;
+        plan.push_back({s,e});
     }
-    sort(v.begin(), v.end(), cmp);
+    sort(plan.begin(),plan.end());
 
-    int height = 1;
-    int st = 0; 
-    int end = 0; // 계획된 일정의 마지막. 직사각형의 끝부분.
+    for(auto p : plan)
+        for(int j = p.first; j <= p.second; j++)
+            yearCnt[j]++;
 
-    vector<pair<int, int>> tmp;
-    for(auto i: v){
-        if(st == 0){ // 가장 처음
-            st = i.first;
-            end = i.second;
-            tmp.push_back(i);
-            continue;
+    for(int i = 1; i <= ONE_YEAR; i++){
+        if(yearCnt[i]){
+            height = max(height,yearCnt[i]);
+            width++;
         }
-        if(end >= i.first){ // 앞과 뒤의 일정이 겹침
-            bool able_add = false;
-            for(auto it = tmp.begin(); it != tmp.end(); it++){
-                pair<int, int>& j = *it;
-                if(j.second < i.first){ // 다른 일정의 뒤에 붙을 수 있음
-                    end = max(end, i.second);
-                    j.second = i.second;
-                    able_add = true;
-                    break;
-                }
-            }
-            if(!able_add){ // 다른 일정 뒤에 못 붙음
-                height++;
-                end = max(end, i.second);
-                tmp.push_back(i);
-            }
-        }
-        else if(end+1 == i.first){ // 연속된 일정
-            end = i.second;
-            tmp.push_back(i);
-        }
-        else if(end+1 < i.first){ // 일정간 관계 X
-            ans += (end-st+1)* height;
-            tmp.clear();
-            height = 1;
-            st = i.first;
-            end = i.second;
-            tmp.push_back(i);
+        if(!yearCnt[i] || i == ONE_YEAR){
+            ans += height * width;
+            height = 0;
+            width = 0;
         }
     }
-    ans += (end-st+1)*height;
     cout << ans;
 }
