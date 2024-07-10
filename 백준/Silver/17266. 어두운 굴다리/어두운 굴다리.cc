@@ -20,7 +20,7 @@ int main() {
 	int n, m;
 	cin >> n >> m;
 	vector<int> v(m);
-	for (int i = 0; i < m;++i) cin >> v[i];
+	for (int i = 0; i < m;i++) cin >> v[i];
 	
 	int left = 1, right = n;
 	int mid, ans = 0;
@@ -35,6 +35,5 @@ int main() {
 		}
 	}
 
-	cout << ans << '\n';
-    return 0;
+	cout << ans << endl;
 }
