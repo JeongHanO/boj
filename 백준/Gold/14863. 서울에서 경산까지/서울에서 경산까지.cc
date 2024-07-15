@@ -14,7 +14,7 @@ int main() {
 	for (int i = 1; i <= n; i++ ) cin >> w[i].first >> w[i].second >> b[i].first >> b[i].second;
 	
 	dp[1][w[1].first] = w[1].second;
-	dp[1][b[1].first] = b[1].second;
+	dp[1][b[1].first] = max(b[1].second, dp[1][b[1].first]);
 
 	for (int i = 2; i <= n; i++) {
 		for (int j = 1; j <= k; j++) {
