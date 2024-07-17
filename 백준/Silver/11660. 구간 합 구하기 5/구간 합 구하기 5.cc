@@ -1,34 +1,32 @@
 #include <iostream>
-#include <algorithm>
-
+#include <vector>
 using namespace std;
 
-int p_sum[1025][1025];
+int board[1025][1025];
 
 int main() {
+	cin.tie(NULL);
+	ios_base::sync_with_stdio(false);
 
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-
-	int N, M, num;
-	cin >> N >> M;
-
-    // 구간합 표 구하기
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			cin >> num;
-			p_sum[i + 1][j + 1] = p_sum[i][j + 1] + p_sum[i + 1][j] - p_sum[i][j] + num;
+	int n, m;
+	cin >> n >> m;
+	
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			int a; cin >> a;
+			board[i][j] = board[i - 1][j] + board[i][j - 1] + a - board[i - 1][j - 1];
 		}
 	}
 
-    // 구해야 하는 구간을 입력받고 구간합 출력하기
-	for (int i = 0; i < M; i++) {
-		int x1, y1, x2, y2;
-		cin >> y1 >> x1 >> y2 >> x2;
-
-		cout << p_sum[y2][x2] - p_sum[y1 - 1][x2] - p_sum[y2][x1 - 1] + p_sum[y1 - 1][x1 - 1] << '\n';
-
+	int a, b, c, d;
+	for (int i = 0; i < m; i++) {
+		cin >> a >> b >> c >>d;
+		cout << board[c][d] - board[c][b-1] - board[a-1][d] + board[a-1][b-1] << '\n';
 	}
 
-	return 0;
 }
+
+/*
+x,y ~ x+2,y+2 구해야하면
+(x+2, y+2) - (x,y-2) - (x-2,y) + (x,y)
+*/
