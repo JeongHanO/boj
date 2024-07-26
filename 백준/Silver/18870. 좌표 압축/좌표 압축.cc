@@ -1,39 +1,28 @@
-#include <vector>
 #include <algorithm>
-#include <set>
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
-int a;
-vector<int> v;
+int n;
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
 
-int main(){
-    cin >> a;
-    v.assign(a, 0);
+	cin >> n;
+	vector<int> v(n);
+	vector<int> tmp(n);
+	for (int i = 0; i < n; i++) {
+		cin >> v[i];
+	}
+	
+	copy(v.begin(), v.end(), tmp.begin());
+	sort(tmp.begin(), tmp.end());
 
-    for(int i = 0; i < a; i++){
-        scanf("%d", &v[i]);
-    }
-    set<int> s;
-    for(int i = 0; i < a; i++){
-        s.insert(v[i]);
-    }
-    vector<int> v1(s.begin(), s.end());
-    int size = v1.size()-1;
+	tmp.erase(unique(tmp.begin(), tmp.end()), tmp.end());
 
-    for(int i = 0; i < a; i++){
-        int l = 0, r = size;
-        int mid;
-        while(l <= r){
-            mid = (l+r)/2;
-            if(v1[mid] == v[i]){
-                cout << mid << ' ';
-                break;
-            }
-            if(v1[mid] > v[i]){
-                r = mid - 1;
-            }
-            else l = mid +1;
-        }
-    }
+	for (int i = 0; i < n; i++) {
+		cout << lower_bound(tmp.begin(), tmp.end(), v[i]) - tmp.begin() << ' ';
+	}
+	
 }
