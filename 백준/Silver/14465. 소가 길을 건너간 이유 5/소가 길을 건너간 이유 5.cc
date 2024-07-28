@@ -1,45 +1,35 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <string>
 using namespace std;
 
-// 크기가 k인 윈도우를 이동하면서
-// 그 사이에 고장난 신호등의 개수를 카운트, 비교
-// 가장 작은 값을 출력
+int n, k, b;
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
 
-int main(){
-    int n, k, b;
-    cin >> n >> k >> b;
-    
-    vector<bool> broken(n+1,false);
-    queue<int> q;
+	cin >> n >> k >> b;
+	vector<bool> v(n+1);
+	int a;
+	for (int i = 0; i < b; i++) {
+		cin >> a;
+		v[a] = true;
+	}
 
-    for(int i = 0; i < b; i++){
-        int a; 
-        cin >> a;
-        broken[a] = true;
-    }
+	int ans;
+	int cnt = 0;
+	for (int i = 1; i <= k; i++) {
+		if (v[i]) cnt++;
+	}
 
-    
-    int tmp = 0;
-    for(int i = 1; i <= k; i++){
-        q.push(broken[i]);
-        if(broken[i]){
-            tmp++;
-        }
-    }
-    
-    int ans = tmp;
-    
-    for(int i = k+1; i <= n; i++){
-        if(q.front()) tmp--;
-        q.pop();
-        
-        if(broken[i]) tmp++;
-        q.push(broken[i]);
+	ans = cnt;
 
-        ans = min(ans, tmp);
-    }    
-
-    cout << ans;
+	for (int i = k + 1; i <= n; i++) {
+		if (v[i]) cnt++;
+		if (v[i - k]) cnt--;
+		
+		if (cnt < ans) ans = cnt;
+	}
+	cout << ans;
 }
