@@ -1,53 +1,71 @@
 #include <iostream>
-using namespace std;
+#include <vector>
+#include <string>
+#include <algorithm>
 #include <queue>
+using namespace std;
 
-queue<int> q;
-int dist[100001] = { 0 };
-bool visited[100001] = { false };
 int n, k;
-int ans;
-int memo[100001];
-vector<int> path;
+pair<int, int> arr[150001]; // 칸까지 걸린 초, 이전 인덱스
 
-void bfs() {
+void bfs(int n) {
+	queue<int> q;
 	q.push(n);
-	visited[n] = true;
-	while (!q.empty()) {
-		int n = q.front();
-		q.pop();
-		int go[3] = { n - 1, n + 1, 2 * n }; // 한 칸 앞, 한 칸 뒤, 두배 점프
-		for (int i = 0; i < 3; i++) {
-			int nx = go[i];
-			if (0 <= nx && nx <= 100000 && !visited[nx]) {
-				q.push(nx);
-				visited[nx] = true;
-				dist[nx] = dist[n] + 1;
-				memo[nx] = n;
+	arr[n].first = 0;
+	arr[n].second = -1;
+	
+	int cnt = 0;
+	bool found = false;
+	while (!q.empty() && !found) {
+		cnt++;
+		int size = q.size();
+		for (int i = 0; i < size; i++) {
+			int now = q.front();
+			q.pop();
+			if (now == k) { // 도착지 찾음
+				cout << arr[now].first << endl;
+				found = true;
+				break;
 			}
-			if (nx == k) {
-				ans = dist[nx];
-				return;
+			if (now + 1 <= 150000 && now+1 != n && arr[now+1].first == 0) {
+				if(arr[now+1].first == 0)
+				arr[now + 1] = { cnt, now };
+				q.push(now + 1);
+			}
+			if (now - 1 >= 0 && now - 1 != n && arr[now - 1].first == 0) {
+				if (arr[now - 1].first == 0)
+				arr[now - 1] = { cnt, now };
+				q.push(now - 1);
+			} 
+			if (now * 2 <= 150000 && now * 2 != n && arr[now * 2].first == 0) {
+				if (arr[now * 2].first == 0)
+				arr[now * 2] = { cnt, now };
+				q.push(now * 2);
 			}
 		}
 	}
 }
 
-int main(void) {
-	ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+int main() {
 	cin >> n >> k;
-	if (n == k) {
-		cout << '0' << '\n' << n;
-	}
-	else {
-		bfs();
-		cout << ans << '\n';
-		path.push_back(k);
-		for (int i = 0; i < ans; i++) {
-			path.push_back(memo[k]);
-			k = memo[k];
+	if (k < n) {
+		cout << n-k<< endl;
+		for (int i = n; i >= k; i--) {
+			cout << i << ' ';
 		}
-		for (int i = path.size() - 1; i >= 0; i--)
-			cout << path[i] << ' ';
+		return 0;
+	}
+	bfs(n);
+
+	vector<int> v;
+	int idx = k;
+	v.push_back(k);
+	while (idx != -1) {
+		v.push_back(arr[idx].second);
+		idx = arr[idx].second;
+	}
+	reverse(v.begin(), v.end());
+	for (int i = 1; i < v.size(); i++) {
+		cout << v[i] << ' ';
 	}
 }
