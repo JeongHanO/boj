@@ -20,20 +20,22 @@ void init() {
 }
 
 void solve() {
-	queue<pair<int, int>> q;
-	q.push({ 0, 0 });
+	priority_queue < pair<int, pair<int, int>>> pq;
+	pq.push({ -board[0][0], {0, 0} });
 	visited[0][0] = board[0][0];
-	while (!q.empty()) {
-		int x = q.front().first;
-		int y = q.front().second;
-		q.pop();
+	while (!pq.empty()) {
+		int cost = -pq.top().first;
+		int x = pq.top().second.first;
+		int y = pq.top().second.second;
+		pq.pop();
 		for (int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 			if (nx >= 0 && ny >= 0 && nx < N && ny < N) {
-				if (visited[nx][ny] > visited[x][y] + board[nx][ny]) {
-					visited[nx][ny] = visited[x][y] + board[nx][ny];
-					q.push({ nx, ny });
+				int n_cost = cost + board[nx][ny];
+				if (n_cost < visited[nx][ny]) {
+					visited[nx][ny] = n_cost;
+					pq.push({ -n_cost,{nx, ny} });
 				}
 			}
 		}
