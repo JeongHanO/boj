@@ -1,41 +1,44 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cmath>
 using namespace std;
 
-int N, M;
-bool ans;
+int a, b;
 vector<int> v[2001];
-bool visited[2001];
+int dat[2001];
+int flag;
 
-void dfs(int a, int depth) {
-	if (depth == 5) {
-		ans = true;
+void solution(int seq, int now) {
+	if (seq == 5)
+	{
+		flag = 1;
 		return;
 	}
-	for (int i = 0; i < v[a].size(); i++) {
-		if (!visited[v[a][i]]) {
-			visited[v[a][i]] = true;
-			dfs(v[a][i], depth + 1);
-			visited[v[a][i]] = false;
-		}
+	for (int i = 0; i < v[now].size(); i++)
+	{
+		if (dat[v[now][i]]) continue;
+		dat[v[now][i]] = 1;
+		solution(seq + 1, v[now][i]);
+		dat[v[now][i]] = 0;
 	}
 }
 
 int main() {
-	cin >> N >> M;
-	int a, b;
-	for (int i = 0; i < M; i++) {
-		cin >> a >> b;
-		v[a].push_back(b);
-		v[b].push_back(a);
+	cin >> a >> b;
+	for (int i = 0; i < b; i++)
+	{
+		int t, r;
+		cin >> t >> r;
+		v[t].push_back(r);
+		v[r].push_back(t);
 	}
-
-	for (int i = 0; i < N; i++) {
-		visited[i] = true;
-		dfs(i, 1);
-		visited[i] = false;
-		if (ans) break;
+	for (int i = 0; i < a; i++)
+	{
+        dat[i] = 1;
+        solution(1, i);
+        dat[i] = 0;
+        if(flag) break;
 	}
-	cout << ans;
+	cout << flag;
 }
